@@ -62,24 +62,24 @@ public class userDAO {
 			System.out.println(connect);
 		}
 	}
-	
+
 	private String getNFTID(String name) throws SQLException {
 		String sql = "SELECT nftid FROM NFTs WHERE name = ?";
 		String nftid = "0";
-		
+
 		connect_func();
-		
+
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, name);
-		
+
 		ResultSet results = preparedStatement.executeQuery();
-		
-		if(results.next())
+
+		if (results.next())
 			nftid = results.getString("nftid");
-		
+
 		results.close();
 		disconnect();
-		
+
 		return nftid;
 	}
 
@@ -139,52 +139,49 @@ public class userDAO {
 		disconnect();
 		return listUser;
 	}
-	
-	public List<Listing> viewListings() throws SQLException{
+
+	public List<Listing> viewListings() throws SQLException {
 		List<Listing> listings = new ArrayList<Listing>();
 		String sql = "SELECT * FROM Listings";
-		
+
 		connect_func();
 		statement = (Statement) connect.createStatement();
 		ResultSet results = statement.executeQuery(sql);
-		
-		while (results.next())
-		{
+
+		while (results.next()) {
 			Listing listing = new Listing();
-			
+
 			listing.listid = results.getString("listid");
 			listing.owner = results.getString("owner");
 			listing.nftid = results.getString("nftid");
 			listing.startTime = results.getString("start");
 			listing.endTime = results.getString("end");
 			listing.price = results.getString("price");
-			
+
 			listings.add(listing);
 		}
-		
+
 		results.close();
 		disconnect();
-		
+
 		return listings;
 	}
-	
+
 	public List<String> getUsernames() throws SQLException {
 		List<String> usernames = new ArrayList<String>();
 		String sql = "SELECT email FROM User";
-		
+
 		connect_func();
 		statement = (Statement) connect.createStatement();
 		ResultSet results = statement.executeQuery(sql);
-		
-		while (results.next())
-		{
+
+		while (results.next()) {
 			usernames.add(results.getString("email"));
 		}
-		
+
 		results.close();
 		disconnect();
-		
-		
+
 		return usernames;
 	}
 
@@ -290,7 +287,7 @@ public class userDAO {
 			String nftName = results.getString("name");
 			names.add(nftName);
 		}
-		
+
 		results.close();
 		disconnect();
 
@@ -330,7 +327,7 @@ public class userDAO {
 		}
 
 		System.out.println(checks);
-		
+
 		resultSet.close();
 		disconnect();
 		return checks;
@@ -353,9 +350,9 @@ public class userDAO {
 				return true;
 			}
 		}
-		
+
 		disconnect();
-		
+
 		return false;
 	}
 
@@ -382,59 +379,58 @@ public class userDAO {
 		return true;
 	}
 
-	public boolean submitListing(String nftName, String user, String daysAvailable, String price) throws SQLException{
+	public boolean submitListing(String nftName, String user, String daysAvailable, String price) throws SQLException {
 		String sql = "INSERT INTO Listings(owner, nftid, start, end, price) VALUES (?, ?, ?, ?, ?)";
 		String getId = String.format("SELECT nftid FROM NFTs WHERE name=%s", nftName);
 		LocalDate startDate = LocalDate.now();
 		LocalTime time = LocalTime.now();
 		LocalDate endDate = startDate.plusDays(Integer.parseInt(daysAvailable));
-		
+
 		connect_func();
-		
+
 		statement = (Statement) connect.createStatement();
-		
+
 		ResultSet results = statement.executeQuery(getId);
-		
+
 		preparedStatement = connect.prepareStatement(sql);
 		preparedStatement.setString(1, user);
 		preparedStatement.setString(2, results.getString("nftid"));
 		preparedStatement.setString(3, startDate + " " + time);
 		preparedStatement.setString(4, endDate + " " + time);
 		preparedStatement.setString(5, price);
-		
+
 		disconnect();
-		
+
 		return true;
 	}
-	
+
 	public boolean transferNFT(String nftName, String targetUser) throws SQLException {
 		// Need to add input validation
 		String nftid = getNFTID(nftName);
 		String sql = "UPDATE NFTs SET owner = ? WHERE nftid = ?";
-		
+
 		connect_func();
-		
+
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, targetUser);
 		preparedStatement.setString(2, nftid);
 		preparedStatement.executeUpdate();
-		
+
 		disconnect();
-		
+
 		return true;
 	}
-	
-	public List<NFT> searchNFT(String nftName) throws SQLException
-	{
+
+	public List<NFT> searchNFT(String nftName) throws SQLException {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT * FROM NFTs WHERE name LIKE '" + nftName + "%'";
-		
+
 		connect_func();
-		
+
 		statement = (Statement) connect.createStatement();
 		ResultSet results = statement.executeQuery(sql);
-		
-		while (results.next()){
+
+		while (results.next()) {
 			NFT nft = new NFT();
 			nft.setNftid(results.getString("nftid"));
 			nft.setName(results.getString("name"));
@@ -442,14 +438,13 @@ public class userDAO {
 			nft.setCreator(results.getString("creator"));
 			nft.setOwner(results.getString("owner"));
 			nft.setMintTime(results.getString("mintTime"));
-			
+
 			resultNFTs.add(nft);
 		}
-		
-		
+
 		results.close();
 		disconnect();
-		
+
 		return resultNFTs;
 	}
 
