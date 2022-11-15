@@ -64,10 +64,12 @@ public class ControlServlet extends HttpServlet {
         	case "/logout":
         		logout(request,response);
         		break;
-        	 case "/list": 
+        	case "/list": 
                  System.out.println("The action is: list");
                  listUser(request, response);           	
                  break;
+        	case "/mint":
+        		mint(request, response);
 	    	}
 	    }
 	    catch(Exception ex) {
@@ -156,7 +158,16 @@ public class ControlServlet extends HttpServlet {
         		response.sendRedirect("login.jsp");
         	}
 	
-	    
+	    private void mint(HttpServletRequest request, HttpServletResponse response) throws ServletException, SQLException, IOException {
+	    	String name = request.getParameter("name");
+	    	String image = request.getParameter("image");
+	    	session = request.getSession();
+	    	
+	    	
+	    	userDAO.mintNFT(name, image, (String) session.getAttribute("username"));
+	    	
+	    	request.getRequestDispatcher("activitypage.jsp").forward(request, response);
+	    }
 
 	     
         
