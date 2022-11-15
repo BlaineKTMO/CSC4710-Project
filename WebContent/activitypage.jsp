@@ -17,5 +17,14 @@
 		 <a href="login.jsp"target ="_self" > logout</a><br><br> 
 		 <p> You can show all the transactions or other attributes here like balance, name of the user and others.</p>
 		 </center>
+		 <form action="createListing" method=get>
+		 	<button type="submit">Create a Listing</button>
+		 </form>
+		 <form action="viewListings" method=get>
+		 	<button type="submit">View Listings</button>
+		 </form>
+		 <form action="transferNFT" method=get>
+		 	<button type="submit">Transfer an NFT</button>
+		 </form>
 	</body>
 </html>

@@ -37,6 +37,15 @@ public class userDAO {
 	public userDAO() {
 	}
 
+	private String getTime() {
+		LocalDate date = LocalDate.now();
+		LocalTime time = LocalTime.now();
+		String datetime = String.format("%d::%d::%d %d::%d::%d", date.getYear(), date.getMonthValue(),
+				date.getDayOfMonth(), time.getHour(), time.getMinute(), time.getSecond());
+
+		return datetime;
+	}
+
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -52,6 +61,26 @@ public class userDAO {
 					"jdbc:mysql://127.0.0.1:3306/testdb?allowPublicKeyRetrieval=true&useSSL=false&user=john&password=pass1234");
 			System.out.println(connect);
 		}
+	}
+	
+	private String getNFTID(String name) throws SQLException {
+		String sql = "SELECT nftid FROM NFTs WHERE name = ?";
+		String nftid = "0";
+		
+		connect_func();
+		
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+		preparedStatement.setString(1, name);
+		
+		ResultSet results = preparedStatement.executeQuery();
+		
+		if(results.next())
+			nftid = results.getString("nftid");
+		
+		results.close();
+		disconnect();
+		
+		return nftid;
 	}
 
 	public boolean database_login(String email, String password) throws SQLException {
@@ -109,6 +138,54 @@ public class userDAO {
 		resultSet.close();
 		disconnect();
 		return listUser;
+	}
+	
+	public List<Listing> viewListings() throws SQLException{
+		List<Listing> listings = new ArrayList<Listing>();
+		String sql = "SELECT * FROM Listings";
+		
+		connect_func();
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		while (results.next())
+		{
+			Listing listing = new Listing();
+			
+			listing.listid = results.getString("listid");
+			listing.owner = results.getString("owner");
+			listing.nftid = results.getString("nftid");
+			listing.startTime = results.getString("start");
+			listing.endTime = results.getString("end");
+			listing.price = results.getString("price");
+			
+			listings.add(listing);
+		}
+		
+		results.close();
+		disconnect();
+		
+		return listings;
+	}
+	
+	public List<String> getUsernames() throws SQLException {
+		List<String> usernames = new ArrayList<String>();
+		String sql = "SELECT email FROM User";
+		
+		connect_func();
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		while (results.next())
+		{
+			usernames.add(results.getString("email"));
+		}
+		
+		results.close();
+		disconnect();
+		
+		
+		return usernames;
 	}
 
 	protected void disconnect() throws SQLException {
@@ -200,6 +277,23 @@ public class userDAO {
 		return user;
 	}
 
+	public List<String> getNFTNames() throws SQLException {
+		String sql = "SELECT name FROM NFTs";
+		List<String> names = new ArrayList<String>();
+
+		connect_func();
+
+		statement = connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+
+		while (results.next()) {
+			String nftName = results.getString("name");
+			names.add(nftName);
+		}
+
+		return names;
+	}
+
 	public boolean checkEmail(String email) throws SQLException {
 		boolean checks = false;
 		String sql = "SELECT * FROM User WHERE email = ?";
@@ -255,18 +349,13 @@ public class userDAO {
 		}
 		return false;
 	}
-	
+
 	public boolean mintNFT(String name, String image, String current_user) throws SQLException {
 		String sql = "INSERT INTO NFTs(name, url, creator, owner, minttime) VALUES (?, ?, ?, ?, ?);";
-		LocalDate date = LocalDate.now();
-		LocalTime time = LocalTime.now();
-		String datetime = String.format("%d::%d::%d %d::%d::%d", date.getYear(), date.getMonthValue(), date.getDayOfMonth(), time.getHour(), time.getMinute(), time.getSecond());
-		
+
 		try {
 			init();
-		}
-		catch (IOException ex)
-		{
+		} catch (IOException ex) {
 		}
 		connect_func();
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
@@ -274,13 +363,52 @@ public class userDAO {
 		preparedStatement.setString(2, image);
 		preparedStatement.setString(3, current_user);
 		preparedStatement.setString(4, current_user);
-		preparedStatement.setString(5, datetime);
-		
+		preparedStatement.setString(5, getTime());
+
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
+
+		disconnect();
+
+		return true;
+	}
+
+	public boolean submitListing(String nftName, String user, String daysAvailable, String price) throws SQLException{
+		String sql = "INSERT INTO Listings(owner, nftid, start, end, price) VALUES (?, ?, ?, ?, ?)";
+		String getId = String.format("SELECT nftid FROM NFTs WHERE name=%s", nftName);
+		LocalDate startDate = LocalDate.now();
+		LocalTime time = LocalTime.now();
+		LocalDate endDate = startDate.plusDays(Integer.parseInt(daysAvailable));
+		
+		connect_func();
+		
+		statement = (Statement) connect.createStatement();
+		
+		ResultSet results = statement.executeQuery(getId);
+		
+		preparedStatement = connect.prepareStatement(sql);
+		preparedStatement.setString(1, user);
+		preparedStatement.setString(2, results.getString("nftid"));
+		preparedStatement.setString(3, startDate + " " + time);
+		preparedStatement.setString(4, endDate + " " + time);
+		preparedStatement.setString(5, price);
+		
+		return true;
+	}
+	
+	public boolean transferNFT(String nftName, String targetUser) throws SQLException {
+		// Need to add input validation
+		String nftid = getNFTID(nftName);
+		String sql = "UPDATE NFTs SET owner = ? WHERE nftid = ?";
+		
+		connect_func();
+		
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+		preparedStatement.setString(1, targetUser);
+		preparedStatement.setString(2, nftid);
+		preparedStatement.executeUpdate();
 		
 		disconnect();
-				
 		
 		return true;
 	}
@@ -335,8 +463,8 @@ public class userDAO {
 						+ "listid INT AUTO_INCREMENT NOT NULL, "
 						+ "owner VARCHAR(100), "
 						+ "nftid INT, "
-						+ "start TIMESTAMP, "
-						+ "end TIMESTAMP, "
+						+ "start DATETIME, "
+						+ "end DATETIME, "
 						+ "price DOUBLE, "
 						+ "PRIMARY KEY(listid), "
 						+ "FOREIGN KEY(owner) REFERENCES User(email), "
