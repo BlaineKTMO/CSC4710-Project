@@ -26,5 +26,8 @@
 		 <form action="transferNFT" method=get>
 		 	<button type="submit">Transfer an NFT</button>
 		 </form>
+		 <button onClick="window.location.href='searchNFT.jsp';">
+		 	Search for an NFT
+		 </button>
 	</body>
 </html>

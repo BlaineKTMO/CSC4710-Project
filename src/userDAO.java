@@ -290,6 +290,9 @@ public class userDAO {
 			String nftName = results.getString("name");
 			names.add(nftName);
 		}
+		
+		results.close();
+		disconnect();
 
 		return names;
 	}
@@ -327,6 +330,9 @@ public class userDAO {
 		}
 
 		System.out.println(checks);
+		
+		resultSet.close();
+		disconnect();
 		return checks;
 	}
 
@@ -347,6 +353,9 @@ public class userDAO {
 				return true;
 			}
 		}
+		
+		disconnect();
+		
 		return false;
 	}
 
@@ -393,6 +402,8 @@ public class userDAO {
 		preparedStatement.setString(4, endDate + " " + time);
 		preparedStatement.setString(5, price);
 		
+		disconnect();
+		
 		return true;
 	}
 	
@@ -411,6 +422,35 @@ public class userDAO {
 		disconnect();
 		
 		return true;
+	}
+	
+	public List<NFT> searchNFT(String nftName) throws SQLException
+	{
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT * FROM NFTs WHERE name LIKE '" + nftName + "%'";
+		
+		connect_func();
+		
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+		
+		while (results.next()){
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("nftid"));
+			nft.setName(results.getString("name"));
+			nft.setUrl(results.getString("url"));
+			nft.setCreator(results.getString("creator"));
+			nft.setOwner(results.getString("owner"));
+			nft.setMintTime(results.getString("mintTime"));
+			
+			resultNFTs.add(nft);
+		}
+		
+		
+		results.close();
+		disconnect();
+		
+		return resultNFTs;
 	}
 
 	public void init() throws SQLException, FileNotFoundException, IOException {
