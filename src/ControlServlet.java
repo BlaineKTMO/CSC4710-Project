@@ -88,8 +88,8 @@ public class ControlServlet extends HttpServlet {
 				case "/searchNFT":
 					searchNFT(request, response);
 					break;
-				case "/submitSearch":
-					submitSearch(request, response);
+				case "/purchaseNFT":
+					purchaseNFT(request, response);
 					break;
 			}
 		} catch (Exception ex) {
@@ -254,8 +254,12 @@ public class ControlServlet extends HttpServlet {
 		// response.sendRedirect("searchResults.jsp");
 	}
 
-	private void submitSearch(HttpServletRequest request, HttpServletResponse response) {
-
+	private void purchaseNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		String nft = request.getParameter("nft");
+		
+		userDAO.transferNFT(nft, currentUser);
+		
+		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
 
 }

@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<h1>Create a Listing</h1>
+	<center>h1>Create a Listing</h1></center>
 	<div align=center>
 		<form name="submitListing" method="post">
 			<label for="nft">NFT: </label>
@@ -22,9 +22,9 @@
 					</option>
 				</select>
 			</c:forEach>
-
-			<input type="text" name="price" size=45>
-			<input type="text" name="daysAvailable" size=45>
+			
+			Price <input type="text" name="price" size=45>
+			Days Available <input type="text" name="daysAvailable" size=45>
 
 		</form>
 	</div>
