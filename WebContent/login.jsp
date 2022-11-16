@@ -11,7 +11,7 @@
 
 <body>
 	<center>
-		<h1> Welcome to ppswap Login page </h1>
+		<h1> Welcome to the Login page </h1>
 	</center>
 	<div align="center">
 		<p> ${loginFailedStr} </p>
