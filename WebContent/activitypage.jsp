@@ -19,21 +19,23 @@
 		<p> You can show all the transactions or other attributes here like balance, name of the user and
 			others.</p>
 	</center>
-	<button onClick="window.location.href='mint.jsp';">
-		Mint an NFT
-	</button>
-	<form action="createListing" method=get>
-		<button type="submit">Create a Listing</button>
-	</form>
-	<form action="viewListings" method=get>
-		<button type="submit">View Listings</button>
-	</form>
-	<form action="transferNFT" method=get>
-		<button type="submit">Transfer an NFT</button>
-	</form>
-	<button onClick="window.location.href='searchNFT.jsp';">
-		Search for an NFT
-	</button>
+	<div align="center">
+		<button onClick="window.location.href='mint.jsp';">
+			Mint an NFT
+		</button>
+		<form action="createListing" method=get>
+			<button type="submit">Create a Listing</button>
+		</form>
+		<form action="viewListings" method=get>
+			<button type="submit">View Listings</button>
+		</form>
+		<form action="transferNFT" method=get>
+			<button type="submit">Transfer an NFT</button>
+		</form>
+		<button onClick="window.location.href='searchNFT.jsp';">
+			Search for an NFT
+		</button>
+	</div>
 </body>
 
 </html>
