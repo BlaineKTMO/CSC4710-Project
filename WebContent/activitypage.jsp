@@ -26,9 +26,9 @@
 		<form action="createListing" method=get>
 			<button type="submit">Create a Listing</button>
 		</form>
-		<form action="viewListings" method=get>
-			<button type="submit">View Listings</button>
-		</form>
+<!-- 		<form action="viewListings" method=get> -->
+<!-- 			<button type="submit">View Listings</button> -->
+<!-- 		</form> -->
 		<form action="transferNFT" method=get>
 			<button type="submit">Transfer an NFT</button>
 		</form>

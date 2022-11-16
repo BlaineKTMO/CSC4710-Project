@@ -28,6 +28,12 @@
 					</td>
 				</tr>
 				<tr>
+					<th> Description: </th>
+					<td>
+						<input type="text" name="description" size=100>
+					</td>
+				</tr>
+				<tr>
 					<td colspan="2" align="center">
 						<input type="submit" value="mint" />
 					</td>

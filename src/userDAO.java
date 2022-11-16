@@ -356,8 +356,8 @@ public class userDAO {
 		return false;
 	}
 
-	public boolean mintNFT(String name, String image, String current_user) throws SQLException {
-		String sql = "INSERT INTO NFTs(name, url, creator, owner, minttime) VALUES (?, ?, ?, ?, ?);";
+	public boolean mintNFT(String name, String image, String current_user, String description) throws SQLException {
+		String sql = "INSERT INTO NFTs(name, url, creator, owner, minttime, description) VALUES (?, ?, ?, ?, ?, ?);";
 
 		try {
 			init();
@@ -370,6 +370,7 @@ public class userDAO {
 		preparedStatement.setString(3, current_user);
 		preparedStatement.setString(4, current_user);
 		preparedStatement.setString(5, getTime());
+		preparedStatement.setString(6, description);
 
 		preparedStatement.executeUpdate();
 		preparedStatement.close();
@@ -490,9 +491,8 @@ public class userDAO {
 						+ "creator VARCHAR(100), "
 						+ "owner VARCHAR(100), "
 						+ "mintTime DATETIME, "
-						+ "PRIMARY KEY(nftid), "
-						+ "FOREIGN KEY(creator) REFERENCES User(email), "
-						+ "FOREIGN KEY(owner) REFERENCES User(email) "
+						+ "description VARCHAR(500), "
+						+ "PRIMARY KEY(nftid) "
 						+ ");"),
 				("CREATE TABLE IF NOT EXISTS Listings("
 						+ "listid INT AUTO_INCREMENT NOT NULL, "

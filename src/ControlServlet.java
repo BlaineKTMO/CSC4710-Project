@@ -180,9 +180,10 @@ public class ControlServlet extends HttpServlet {
 			throws ServletException, SQLException, IOException {
 		String name = request.getParameter("name");
 		String image = request.getParameter("image");
+		String desc = request.getParameter("description");
 		session = request.getSession();
 
-		userDAO.mintNFT(name, image, (String) session.getAttribute("username"));
+		userDAO.mintNFT(name, image, currentUser, desc);
 
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
