@@ -11,7 +11,7 @@
 </head>
 
 <body>
-	<center>h1>Create a Listing</h1></center>
+	<center><h1>Create a Listing</h1></center>
 	<div align=center>
 		<form name="submitListing" method="post">
 			<label for="nft">NFT: </label>
