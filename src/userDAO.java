@@ -359,10 +359,6 @@ public class userDAO {
 	public boolean mintNFT(String name, String image, String current_user, String description) throws SQLException {
 		String sql = "INSERT INTO NFTs(name, url, creator, owner, minttime, description) VALUES (?, ?, ?, ?, ?, ?);";
 
-		try {
-			init();
-		} catch (IOException ex) {
-		}
 		connect_func();
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
 		preparedStatement.setString(1, name);
