@@ -17,7 +17,6 @@
 			<td>
 			<td>
 				<c:out value="${nft.name}"/>
-<<<<<<< Updated upstream
 			<td>
 			<td>
 				<c:out value="${nft.url}"/>
@@ -45,12 +44,6 @@
 	</select>
 	<input type="submit" name="purchase" value="Purchase">
 	</form>
-=======
-			</option>
-			</c:forEach>
-		</select>
-		<input type="submit" name="purchase" value="Purchase">
-		</form>
 		<form action="viewNFT" method="post">
 		<select name="nft" id = "nft">
 			<c:forEach var="nft" items="${nfts}">
@@ -63,7 +56,5 @@
 		</form>
 		
 	
-	</div>
->>>>>>> Stashed changes
 </body>
 </html>
