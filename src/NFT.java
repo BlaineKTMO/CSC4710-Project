@@ -5,6 +5,7 @@ public class NFT {
     private String creator;
     private String owner;
     private String mintTime;
+    private String description;
     
     public NFT() {}
 
@@ -15,6 +16,7 @@ public class NFT {
         this.creator = creator;
         this.owner = owner;
         this.mintTime = mintTime;
+        this.description = description;
     }
 
     public String getNftid() {
@@ -64,4 +66,14 @@ public class NFT {
     public void setMintTime(String mintTime) {
         this.mintTime = mintTime;
     }
+    
+    public String getDescription() {
+        return description;
+    }
+
+
+	public void setDescription(String description) {
+		this.description = description;
+		
+	}
 }

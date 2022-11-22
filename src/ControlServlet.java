@@ -91,6 +91,15 @@ public class ControlServlet extends HttpServlet {
 				case "/submitSearch":
 					submitSearch(request, response);
 					break;
+				case "/creatorList":
+					creatorList(request, response);
+					break;
+				case "/viewNFT":
+					viewNFT(request, response);
+					break;
+				case "/searchUser":
+					searchUser(request, response);
+					break;
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -251,5 +260,35 @@ public class ControlServlet extends HttpServlet {
 	private void submitSearch(HttpServletRequest request, HttpServletResponse response) {
 		
 	}
+	
+	private void viewNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		String nft = request.getParameter("nft");
+		List<NFT> resultList = userDAO.viewNFT(nft);
+		
+		session = request.getSession();
+		session.setAttribute("nfts", resultList);
+		
+		request.getRequestDispatcher("nftView.jsp").forward(request, response);
+	}
+	
+	private void creatorList(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, SQLException {
+		List<NFT> resultList = userDAO.mintedList(currentUser);
+		request.setAttribute("mintList", resultList);
+		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
+	}
+	
+	private void searchUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		String user = request.getParameter("user");
+		List<user> resultList = userDAO.searchUser(user);
+		List<NFT> nftList = userDAO.ownedNftList(user);
+		
+		session = request.getSession();
+		session.setAttribute("user", resultList.get(0));
+		session.setAttribute("nfts", nftList);
+		
+		request.getRequestDispatcher("viewUser.jsp").forward(request, response);
+	}
+	
 
 }
