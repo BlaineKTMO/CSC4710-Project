@@ -1,0 +1,37 @@
+<%@ page import="java.util.List" %>
+    <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+        <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Purchase History</title>
+</head>
+<body>
+    <h1>Purchase History</h1>
+    <table>
+        <c:forEach var="tran" items="${trans}">
+        <tr>
+            <td>
+                <c:out value="${tran.transid}"/>
+            <td>
+            <td>
+                <c:out value="${tran.origin}"/>
+            <td>
+            <td>
+                <c:out value="${tran.nftid}"/>
+            <td>
+            <td>
+                <c:out value="${tran.transtype}"/>
+            <td>
+            <td>
+                <c:out value="${tran.timestamp}"/>
+            <td>
+            <td>
+                <c:out value="${tran.price}"/>
+            <td>
+        </tr>
+        </c:forEach>
+    </table>
+</body>
+</html>

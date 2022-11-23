@@ -10,13 +10,15 @@
 <body>
 <h1>Current Listings</h1>
 <table>
-<c:foreach var="listing" items="${listings}">
+		<option>
+<%-- 		<c:foreach var="listing" items="${listings}"> --%>
+		</option>
 	<tr>
 		<td>
 		
 		</td>
 	</tr>
-</c:foreach>
+<%-- </c:foreach> --%>
 
 </table>
 </body>

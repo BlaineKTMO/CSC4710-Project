@@ -79,6 +79,12 @@
 		<button onClick="window.location.href='idView.jsp';">
 			Search Users
 		</button>
+		<form action="getBought" method=get>
+			<button type="submit">Purchase History</button>
+		</form>
+		<form action="getSold" method=get>
+			<button type="submit">Selling History</button>
+		</form>
 	</div>
 </body>
 </html>

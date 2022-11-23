@@ -10,10 +10,14 @@
 
 <body>
 	<h1>Transfer an NFT</h1>
-	<form action="submitTransfer" method="post">
+	<form action="submitTransfer" method="post" id="nft">
 	<label for="nft">NFT: </label>
 	<label for="user">Recipient: </label>
-		<select name="nft" id="nft">
+
+	<button type="submit">Submit Transfer</button>
+	</form>
+	
+			<select name="nft" id="nft" form="nft">
 		<c:forEach var="nftName" items="${names}">
 			<option>
 				<c:out value="${nftName}" />
@@ -27,8 +31,6 @@
 			</option>
 			</c:forEach>
 		</select>
-	<button type="submit">Submit Transfer</button>
-	</form>
 </body>
 
 </html>

@@ -100,6 +100,12 @@ public class ControlServlet extends HttpServlet {
 				case "/searchUser":
 					searchUser(request, response);
 					break;
+				case "/getBought":
+					getBought(request, response);
+					break;
+				case "/getSold":
+					getSold(request, response);
+					break;
 			}
 		} catch (Exception ex) {
 			System.out.println(ex.getMessage());
@@ -208,13 +214,15 @@ public class ControlServlet extends HttpServlet {
 
 	private void submitListing(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		String nftName = request.getParameter("name");
+		String nftName = request.getParameter("nft");
+
 		String price = request.getParameter("price");
 		String daysAvailable = request.getParameter("daysAvailable");
 
 		session = request.getSession();
 
-		userDAO.submitListing(nftName, (String) session.getAttribute("username"), daysAvailable, price);
+		userDAO.submitListing(nftName, currentUser, daysAvailable, price);
+		request.getRequestDispatcher("listings.jsp").forward(request, response);
 
 	}
 
@@ -265,8 +273,15 @@ public class ControlServlet extends HttpServlet {
 
 	private void purchaseNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
+		int price = Integer.parseInt(request.getParameter("price"));
+		String name;
 		
 		userDAO.transferNFT(nft, currentUser);
+		userDAO.changeBalance(currentUser, 0 - price);
+		
+		name = userDAO.searchNFT(nft).get(0).getOwner();
+		userDAO.changeBalance(name, price);
+		
 		
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
@@ -302,5 +317,29 @@ public class ControlServlet extends HttpServlet {
 		session.setAttribute("nfts", nftList);
 		
 		request.getRequestDispatcher("viewUser.jsp").forward(request, response);
+	}
+	private void getBought(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, SQLException {
+		List<Transaction> transactionList = userDAO.getBought(currentUser);
+//		List<NFT> resultList = new ArrayList<NFT>();
+//		for(Transaction trans : transactionList)
+//		{
+//			resultList.add(userDAO.searchNFT(trans.getNftid()).get(0));
+//		}
+		
+		request.setAttribute("trans", transactionList);
+		request.getRequestDispatcher("purchaseHistory.jsp").forward(request, response);
+	}
+	private void getSold(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException, SQLException {
+		List<Transaction> transactionList = userDAO.getSold(currentUser);
+//		List<NFT> resultList = new ArrayList<NFT>();
+//		for(Transaction trans : transactionList)
+//		{
+//			resultList.add(userDAO.searchNFT(trans.getNftid()).get(0));
+//		}
+//		
+		request.setAttribute("trans", transactionList);
+		request.getRequestDispatcher("sellingHistory.jsp").forward(request, response);
 	}
 }
