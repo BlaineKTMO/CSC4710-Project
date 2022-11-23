@@ -9,31 +9,35 @@
 </head>
 <body>
 	<h1>Search Results</h1>
-	<table>
-		<c:forEach var="nft" items="${nfts}">
-		<tr>
-			<td>
-				<c:out value="${nft.nftid}"/>
-			<td>
-			<td>
-				<c:out value="${nft.name}"/>
-			<td>
-			<td>
-				<c:out value="${nft.url}"/>
-			<td>
-			<td>
-				<c:out value="${nft.creator}"/>
-			<td>
-			<td>
-				<c:out value="${nft.owner}"/>
-			<td>
-			<td>
-				<c:out value="${nft.mintTime}"/>
-			<td>
-		</tr>
-		</c:forEach>
-	</table>
-	<label for="nft">NFT:</label>
+	
+	<div align="center">
+		<table>
+			<c:forEach var="nft" items="${nfts}">
+			<tr>
+				<td>
+					<c:out value="${nft.nftid}"/>
+				<td>
+				<td>
+					<c:out value="${nft.name}"/>
+				<td>
+				<td>
+					<c:out value="${nft.url}"/>
+				<td>
+				<td>
+					<c:out value="${nft.creator}"/>
+				<td>
+				<td>
+					<c:out value="${nft.owner}"/>
+				<td>
+				<td>
+					<c:out value="${nft.mintTime}"/>
+				<td>
+			</tr>
+			</c:forEach>
+		</table>
+	
+		<label for="nft">NFT:</label>
+		
 	<form action="purchaseNFT" method="post">
 	<select name="nft" id = "nft">
 		<c:forEach var="nft" items="${nfts}">
@@ -54,7 +58,5 @@
 		</select>
 		<input type="submit" name="viewNFT" value="View">
 		</form>
-		
-	
 </body>
 </html>

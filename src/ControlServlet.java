@@ -88,8 +88,8 @@ public class ControlServlet extends HttpServlet {
 				case "/searchNFT":
 					searchNFT(request, response);
 					break;
-				case "/submitSearch":
-					submitSearch(request, response);
+				case "/purchaseNFT":
+					purchaseNFT(request, response);
 					break;
 				case "/creatorList":
 					creatorList(request, response);
@@ -189,9 +189,10 @@ public class ControlServlet extends HttpServlet {
 			throws ServletException, SQLException, IOException {
 		String name = request.getParameter("name");
 		String image = request.getParameter("image");
+		String desc = request.getParameter("description");
 		session = request.getSession();
 
-		userDAO.mintNFT(name, image, (String) session.getAttribute("username"));
+		userDAO.mintNFT(name, image, currentUser, desc);
 
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
@@ -205,56 +206,69 @@ public class ControlServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
-	private void submitListing(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
-	    	String nftName = request.getParameter("name");
-	    	String price = request.getParameter("price");
-	    	String daysAvailable = request.getParameter("daysAvailable");
-	    	
-	    	session = request.getSession();
-	    	
-	    	userDAO.submitListing(nftName, (String) session.getAttribute("username"), daysAvailable, price);
-	    	
- 	    }
-	
-	private void viewListings(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+	private void submitListing(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
+		String nftName = request.getParameter("name");
+		String price = request.getParameter("price");
+		String daysAvailable = request.getParameter("daysAvailable");
+
+		session = request.getSession();
+
+		userDAO.submitListing(nftName, (String) session.getAttribute("username"), daysAvailable, price);
+
+	}
+
+	private void viewListings(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
 		List<Listing> listings = userDAO.viewListings();
-		
+
 		session = request.getSession();
 		session.setAttribute("listings", listings);
-		
+
 		request.getRequestDispatcher("listings.jsp").forward(request, response);
-		
+
 	}
-	
-	private void startTransferPage(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+
+	private void startTransferPage(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
 		List<String> names = userDAO.getNFTNames();
 		List<String> users = userDAO.getUsernames();
-		
+
 		session = request.getSession();
 		session.setAttribute("names", names);
 		session.setAttribute("users", users);
-		
+
 		request.getRequestDispatcher("transferNFT.jsp").forward(request, response);
 	}
-	
-	private void submitTransfer(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+
+	private void submitTransfer(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
 		String targetUser = request.getParameter("user");
-		
+
 		userDAO.transferNFT(nft, targetUser);
-		
+
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
-	
-	private void searchNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException{
+
+	private void searchNFT(HttpServletRequest request, HttpServletResponse response)
+			throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("targetName");
 		List<NFT> resultList = userDAO.searchNFT(nft);
-		
+
 		session = request.getSession();
 		session.setAttribute("nfts", resultList);
-		
+
 		request.getRequestDispatcher("searchResults.jsp").forward(request, response);
-//		response.sendRedirect("searchResults.jsp");
+		// response.sendRedirect("searchResults.jsp");
+	}
+
+	private void purchaseNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
+		String nft = request.getParameter("nft");
+		
+		userDAO.transferNFT(nft, currentUser);
+		
+		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
 	
 	private void submitSearch(HttpServletRequest request, HttpServletResponse response) {
@@ -289,6 +303,4 @@ public class ControlServlet extends HttpServlet {
 		
 		request.getRequestDispatcher("viewUser.jsp").forward(request, response);
 	}
-	
-
 }
