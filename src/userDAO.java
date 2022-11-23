@@ -63,7 +63,7 @@ public class userDAO {
 		}
 	}
 
-	private String getNFTID(String name) throws SQLException {
+	public String getNFTID(String name) throws SQLException {
 		String sql = "SELECT nftid FROM NFTs WHERE name = ?";
 		String nftid = "0";
 
@@ -81,6 +81,26 @@ public class userDAO {
 		disconnect();
 
 		return nftid;
+	}
+	
+	String getPrice(String nftid) throws SQLException {
+		String sql = "SELECT price FROM listings WHERE nftid = ?";
+		String price = "0";
+
+		connect_func();
+
+		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
+		preparedStatement.setString(1, nftid);
+
+		ResultSet results = preparedStatement.executeQuery();
+
+		if (results.next())
+			price = results.getString("price");
+
+		results.close();
+		disconnect();
+
+		return price;
 	}
 
 	public boolean database_login(String email, String password) throws SQLException {
@@ -124,13 +144,14 @@ public class userDAO {
 			String lastName = resultSet.getString("lastName");
 			String password = resultSet.getString("password");
 			String birthday = resultSet.getString("birthday");
+			double balance = resultSet.getDouble("balance");
 			String adress_street_num = resultSet.getString("adress_street_num");
 			String adress_street = resultSet.getString("adress_street");
 			String adress_city = resultSet.getString("adress_city");
 			String adress_state = resultSet.getString("adress_state");
 			String adress_zip_code = resultSet.getString("adress_zip_code");
 
-			user users = new user(email, firstName, lastName, password, birthday, adress_street_num, adress_street,
+			user users = new user(email, firstName, lastName, password, birthday, balance, adress_street_num, adress_street,
 					adress_city, adress_state, adress_zip_code);
 			listUser.add(users);
 		}
@@ -258,12 +279,13 @@ public class userDAO {
 			String lastName = resultSet.getString("lastName");
 			String password = resultSet.getString("password");
 			String birthday = resultSet.getString("birthday");
+			double balance = resultSet.getDouble("balance");
 			String adress_street_num = resultSet.getString("adress_street_num");
 			String adress_street = resultSet.getString("adress_street");
 			String adress_city = resultSet.getString("adress_city");
 			String adress_state = resultSet.getString("adress_state");
 			String adress_zip_code = resultSet.getString("adress_zip_code");
-			user = new user(email, firstName, lastName, password, birthday, adress_street_num, adress_street,
+			user = new user(email, firstName, lastName, password, birthday, balance, adress_street_num, adress_street,
 					adress_city, adress_state, adress_zip_code);
 		}
 
@@ -443,11 +465,11 @@ public class userDAO {
 		return true;
 	}
 	
-	public boolean changeBalance(String user, int change) throws SQLException {
+	public boolean changeBalance(String user, double change) throws SQLException {
 		// Need to add input validation
 		String sql = "UPDATE user SET balance = ? WHERE email = ?";
 		String getBal = String.format("SELECT balance FROM user WHERE email = \"%s\"", user);
-		int balance;
+		double balance;
 
 		connect_func();
 		
@@ -456,16 +478,20 @@ public class userDAO {
         ResultSet results = statement.executeQuery(getBal);
         results.next();
 
-        balance = results.getInt("balance");
+        balance = results.getDouble("balance");
+        
+        System.out.println("you balance is: " + balance);
         
         results.close();
 		disconnect();
 		
-		
+		double total = balance + change;
+		System.out.println("change is" + change);
+		System.out.println("cahange and balance"+ total);
 		
 		connect_func();
 		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-		preparedStatement.setString(1, balance + change);
+		preparedStatement.setDouble(1, balance + change);
 		preparedStatement.setString(2, user);
 		preparedStatement.executeUpdate();
 		disconnect();
@@ -594,13 +620,14 @@ public class userDAO {
 			String lastName = resultSet.getString("lastName");
 			String password = resultSet.getString("password");
 			String birthday = resultSet.getString("birthday");
+			double balance = resultSet.getDouble("balance");
 			String adress_street_num = resultSet.getString("adress_street_num");
 			String adress_street = resultSet.getString("adress_street");
 			String adress_city = resultSet.getString("adress_city");
 			String adress_state = resultSet.getString("adress_state");
 			String adress_zip_code = resultSet.getString("adress_zip_code");
 
-			user users = new user(email, firstName, lastName, password, birthday, adress_street_num, adress_street,
+			user users = new user(email, firstName, lastName, password, birthday, balance, adress_street_num, adress_street,
 					adress_city, adress_state, adress_zip_code);
 			listUser.add(users);
 		}
@@ -748,7 +775,7 @@ public class userDAO {
 				("CREATE TABLE IF NOT EXISTS User(" + "email VARCHAR(50) NOT NULL, "
 						+ "firstName VARCHAR(10) NOT NULL, " + "lastName VARCHAR(10) NOT NULL, "
 						+ "password VARCHAR(20) NOT NULL, " + "birthday DATE NOT NULL, "
-								+ "balance INT, "
+								+ "balance DOUBLE DEFAULT 100, "
 						+ "adress_street_num VARCHAR(4) , " + "adress_street VARCHAR(30) , "
 						+ "adress_city VARCHAR(20)," + "adress_state VARCHAR(2)," + "adress_zip_code VARCHAR(5),"
 								+ ""

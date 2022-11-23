@@ -166,11 +166,12 @@ public class ControlServlet extends HttpServlet {
 		String adress_state = request.getParameter("adress_state");
 		String adress_zip_code = request.getParameter("adress_zip_code");
 		String confirm = request.getParameter("confirmation");
+		double balance = 100;
 
 		if (password.equals(confirm)) {
 			if (!userDAO.checkEmail(email)) {
 				System.out.println("Registration Successful! Added to database");
-				user users = new user(email, firstName, lastName, password, birthday, adress_street_num, adress_street,
+				user users = new user(email, firstName, lastName, password, birthday, balance, adress_street_num, adress_street,
 						adress_city, adress_state, adress_zip_code);
 				userDAO.insert(users);
 				response.sendRedirect("login.jsp");
@@ -273,14 +274,16 @@ public class ControlServlet extends HttpServlet {
 
 	private void purchaseNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
-		int price = Integer.parseInt(request.getParameter("price"));
+		String nftid = userDAO.getNFTID(nft);
+		double price = Double.parseDouble(userDAO.getPrice(nftid));
+		System.out.println(price);
 		String name;
 		
-		userDAO.transferNFT(nft, currentUser);
 		userDAO.changeBalance(currentUser, 0 - price);
 		
 		name = userDAO.searchNFT(nft).get(0).getOwner();
 		userDAO.changeBalance(name, price);
+		userDAO.transferNFT(nft, currentUser);
 		
 		
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);

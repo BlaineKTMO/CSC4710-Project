@@ -9,6 +9,7 @@ public class user {
 	protected String adress_state;
 	protected String adress_zip_code;
 	protected String birthday;
+	protected double balance;
 	protected int cash_bal;
 	protected int PPS_bal;
 
@@ -20,20 +21,21 @@ public class user {
 		this.email = email;
 	}
 
-	public user(String email, String firstName, String lastName, String password, String birthday,
+	public user(String email, String firstName, String lastName, String password, String birthday,double balance,
 			String adress_street_num, String adress_street, String adress_city, String adress_state,
 			String adress_zip_code) {
-		this(firstName, lastName, password, birthday, adress_street_num, adress_street, adress_city, adress_state,
+		this(firstName, lastName, password, birthday, balance, adress_street_num, adress_street, adress_city, adress_state,
 				adress_zip_code);
 		this.email = email;
 	}
 
-	public user(String firstName, String lastName, String password, String birthday, String adress_street_num,
+	public user(String firstName, String lastName, String password, String birthday,double balance, String adress_street_num,
 			String adress_street, String adress_city, String adress_state, String adress_zip_code) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.password = password;
 		this.birthday = birthday;
+		this.balance = balance;
 		this.adress_street_num = adress_street_num;
 		this.adress_street = adress_street;
 		this.adress_city = adress_city;
@@ -80,6 +82,14 @@ public class user {
 
 	public void setBirthday(String birthday) {
 		this.birthday = birthday;
+	}
+	
+	public double getBalance() {
+		return balance;
+	}
+
+	public void setBalance(double balance) {
+		this.balance = balance;
 	}
 
 	public String getAdress_street_num() {
