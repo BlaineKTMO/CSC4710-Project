@@ -304,7 +304,7 @@ public class ControlServlet extends HttpServlet {
 			throws ServletException, IOException, SQLException {
 		List<NFT> resultList = userDAO.mintedList(currentUser);
 		request.setAttribute("mintList", resultList);
-		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
+		request.getRequestDispatcher("mintedList.jsp").forward(request, response);
 	}
 	
 	private void searchUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
