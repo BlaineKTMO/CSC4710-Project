@@ -9,7 +9,7 @@ public class NFT {
     
     public NFT() {}
 
-    public NFT(String nftid, String name, String url, String creator, String owner, String mintTime) {
+    public NFT(String nftid, String name, String url, String creator, String owner, String mintTime, String description) {
         this.nftid = nftid;
         this.name = name;
         this.url = url;
