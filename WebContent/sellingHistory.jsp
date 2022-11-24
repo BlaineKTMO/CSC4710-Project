@@ -5,30 +5,30 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>Search Results</title>
+<title>Selling History</title>
 </head>
 <body>
-    <h1>Search Results</h1>
+    <h1>Selling History</h1>
     <table>
-        <c:forEach var="nft" items="${nfts}">
+        <c:forEach var="tran" items="${trans}">
         <tr>
             <td>
-                <c:out value="${nft.nftid}"/>
+                <c:out value="${tran.transid}"/>
             <td>
             <td>
-                <c:out value="${nft.name}"/>
+                <c:out value="${tran.recipient}"/>
             <td>
             <td>
-                <c:out value="${nft.url}"/>
+                <c:out value="${tran.nftName}"/>
             <td>
             <td>
-                <c:out value="${nft.creator}"/>
+                <c:out value="${tran.transtype}"/>
             <td>
             <td>
-                <c:out value="${nft.owner}"/>
+                <c:out value="${tran.timestamp}"/>
             <td>
             <td>
-                <c:out value="${nft.mintTime}"/>
+                <c:out value="${tran.price}"/>
             <td>
         </tr>
         </c:forEach>

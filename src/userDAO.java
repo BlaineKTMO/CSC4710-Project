@@ -658,7 +658,7 @@ public class userDAO {
 	
 	public List<Transaction> transactionList(String user) throws SQLException {
 		List<Transaction> resultTrans = new ArrayList<Transaction>();
-		String sql = "SELECT * FROM transactions WHERE origin = '" + user + "' AND transtype = 0";
+		String sql = "SELECT * FROM transactions WHERE origin = '" + user + "' AND transtype = 1";
 		connect_func();
 
 		statement = (Statement) connect.createStatement();
@@ -685,34 +685,7 @@ public class userDAO {
 	
     public List<Transaction> getBought(String user) throws SQLException {
         List<Transaction> resultTransactions = new ArrayList<Transaction>();
-        String sql = "SELECT * FROM Transactions WHERE recipient='"+user+"'";
-        connect_func();
-
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			Transaction trans = new Transaction();
-			trans.setTransid(results.getInt("transid"));
-			trans.setOrigin(results.getString("origin"));
-			trans.setNftid(results.getInt("nftid"));
-			trans.setRecipient(results.getString("recipient"));
-			trans.setTranstype(results.getInt("transtype"));
-			trans.setTimestamp(results.getString("timestamp"));
-			trans.setPrice(results.getDouble("price"));
-
-			resultTransactions.add(trans);
-		}
-
-		results.close();
-		disconnect();
-
-        return resultTransactions;
-    }
-    
-    public List<Transaction> getSold(String user) throws SQLException {
-        List<Transaction> resultTransactions = new ArrayList<Transaction>();
-        String sql = "SELECT * FROM Transactions WHERE origin='"+user+"'";
+        String sql = "SELECT * FROM Transactions WHERE recipient='"+user+"' AND transtype=1";
         connect_func();
 
 		statement = (Statement) connect.createStatement();
@@ -728,12 +701,45 @@ public class userDAO {
 			trans.setTimestamp(results.getString("timestamp"));
 			trans.setPrice(results.getDouble("price"));
 			
+			resultTransactions.add(trans);
+		}
+		
+		results.close();
+		disconnect();
+		
+		for(Transaction trans : resultTransactions) {
 			trans.setNftName(this.searchNFT(trans.getNftid()).get(0).getName());
+		}
+        return resultTransactions;
+    }
+    
+    public List<Transaction> getSold(String user) throws SQLException {
+        List<Transaction> resultTransactions = new ArrayList<Transaction>();
+        String sql = "SELECT * FROM Transactions WHERE origin='"+user+"' AND transtype=1";
+        connect_func();
+
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+
+		while (results.next()) {
+			Transaction trans = new Transaction();
+			trans.setTransid(results.getInt("transid"));
+			trans.setOrigin(results.getString("origin"));
+			trans.setNftid(results.getInt("nftid"));
+			trans.setRecipient(results.getString("recipient"));
+			trans.setTranstype(results.getInt("transtype"));
+			trans.setTimestamp(results.getString("timestamp"));
+			trans.setPrice(results.getDouble("price"));
+			
 			resultTransactions.add(trans);
 		}
 
 		results.close();
 		disconnect();
+		
+		for(Transaction trans : resultTransactions) {
+			trans.setNftName(this.searchNFT(trans.getNftid()).get(0).getName());
+		}
 
         return resultTransactions;
     }
