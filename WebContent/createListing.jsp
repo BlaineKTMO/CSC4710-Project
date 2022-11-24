@@ -28,7 +28,7 @@
 			<button type="submit">Submit Listing</button>
 
 		</form>
-
+		 <a href = "javascript:history.back()">Back to previous page</a>
 	</div>
 </body>
 

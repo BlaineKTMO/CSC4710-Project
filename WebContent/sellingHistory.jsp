@@ -38,6 +38,7 @@
         </tr>
         </c:forEach>
     </table>
+     <a href = "javascript:history.back()">Back to previous page</a>
     </div>
 </body>
 </html>

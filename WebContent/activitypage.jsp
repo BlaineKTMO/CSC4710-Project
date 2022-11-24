@@ -10,7 +10,6 @@
 <center>
 	<h1>Welcome! You have been successfully logged in</h1>
 </center>
-
 <body>
 	<center>
 		<a href="login.jsp" target="_self"> logout</a><br><br>

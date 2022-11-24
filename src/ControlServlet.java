@@ -223,7 +223,7 @@ public class ControlServlet extends HttpServlet {
 		session = request.getSession();
 
 		userDAO.submitListing(nftName, currentUser, daysAvailable, price);
-		request.getRequestDispatcher("listings.jsp").forward(request, response);
+		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 
 	}
 
@@ -292,7 +292,7 @@ public class ControlServlet extends HttpServlet {
 	private void viewNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
 		List<NFT> resultList = userDAO.viewNFT(nft);
-		List<Transaction> transList = userDAO.transactionList(userDAO.searchNFT(nft).get(0).getNftid() );
+		List<Transaction> transList = userDAO.transactionList(Integer.parseInt(nft));
 		String price = userDAO.getPrice(nft);
 		
 		session = request.getSession();

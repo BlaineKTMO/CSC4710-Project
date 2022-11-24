@@ -9,21 +9,18 @@
 </head>
 
 <body>
+	<div align="center">
 	<h1>Transfer an NFT</h1>
 	<form action="submitTransfer" method="post" id="nft">
 	<label for="nft">NFT: </label>
-	<label for="user">Recipient: </label>
-
-	<button type="submit">Submit Transfer</button>
-	</form>
-	
-			<select name="nft" id="nft" form="nft">
+	<select name="nft" id="nft" form="nft">
 		<c:forEach var="nftName" items="${names}">
 			<option>
 				<c:out value="${nftName}" />
 			</option>
 			</c:forEach>
 		</select>
+		<label for="user">Recipient: </label>
 		<select name="user" id="user">
 		<c:forEach var="usernames" items="${users}">
 			<option>
@@ -31,6 +28,9 @@
 			</option>
 			</c:forEach>
 		</select>
+	<button type="submit">Submit Transfer</button>
+	</form>
+		 <a href = "javascript:history.back()">Back to previous page</a>
+		 </div>
 </body>
-
 </html>

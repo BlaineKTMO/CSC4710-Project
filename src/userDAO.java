@@ -687,7 +687,7 @@ public class userDAO {
 	
 	public List<Transaction> transactionList(int nftid) throws SQLException {
 		List<Transaction> resultTrans = new ArrayList<Transaction>();
-		String sql = "SELECT * FROM transactions WHERE nftid = '" + nftid + "'";
+		String sql = "SELECT * FROM transactions WHERE nftid =" + nftid;
 		connect_func();
 
 		statement = (Statement) connect.createStatement();

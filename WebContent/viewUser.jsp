@@ -35,6 +35,8 @@
 			</c:forEach>
 		</table>
 		<h2> User BALANCE : $<c:out value="${user.balance}"/></h2>
+		
+		 <a href = "javascript:history.back()">Back to previous page</a>
 		</div>
 </body>
 </html>

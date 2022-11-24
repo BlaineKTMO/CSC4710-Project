@@ -69,5 +69,6 @@
 		</select>
 		<input type="submit" name="viewNFT" value="View">
 		</form>
+		 <a href = "javascript:history.back()">Back to previous page</a>
 </body>
 </html>

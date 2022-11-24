@@ -54,13 +54,13 @@
 			</tr>
 		</table>
 	<caption>
-	<h2>Purchase History</h2>
+	<h2>Transaction History</h2>
 	</caption>
 	    <table border="1" cellpadding="6">
 				<tr>
                     <th>Trans ID</th>
                     <th>Origin</th>
-                    <th>NFT Name</th>
+                    <th>Trans Type</th>
                     <th>TimeStamp</th>
                     <th>Price</th>
                 </tr>
@@ -73,7 +73,7 @@
 	                <c:out value="${tran.origin}"/>
 	            </td>
 	            <td>
-	                <c:out value="${tran.nftName}"/>
+	                <c:out value="${tran.transtype}"/>
 	            </td>
 	            <td>
 	                <c:out value="${tran.timestamp}"/>
@@ -84,38 +84,7 @@
 	        </tr>
        		</c:forEach>
     	</table>
-    <caption>
-	<h2>Selling History</h2>
-	</caption>
-	    <table border="1" cellpadding="6">
-					<tr>
-	                    <th>Trans ID</th>
-	                    <th>Recipient</th>
-	                    <th>NFT Name</th>
-	                    <th>TimeStamp</th>
-	                    <th>Price</th>
-	                </tr>
-	        <c:forEach var="tran" items="${trans}">
-	        <tr>
-	            <td>
-	                <c:out value="${tran.transid}"/>
-	            </td>
-	            <td>
-	                <c:out value="${tran.recipient}"/>
-	            </td>
-	            <td>
-	                <c:out value="${tran.nftName}"/>
-	            </td>
-	            <td>
-	                <c:out value="${tran.timestamp}"/>
-	            </td>
-	            <td>
-	                <c:out value="${tran.price}"/>
-	            </td>
-	        </tr>
-	        </c:forEach>
-    	</table>
-	
+	 <a href = "javascript:history.back()">Back to previous page</a>
 	</div>
 </body>
 </html>

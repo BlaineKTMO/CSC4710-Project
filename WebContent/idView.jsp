@@ -14,5 +14,6 @@
 	<input type="text" size=45 name="user">
 	<input type="submit" value="search">
 	</form>
+	 <a href = "javascript:history.back()">Back to previous page</a>
 </body>
 </html>
