@@ -83,7 +83,7 @@ public class userDAO {
 		return nftid;
 	}
 	
-	String getPrice(String nftid) throws SQLException {
+	public String getPrice(String nftid) throws SQLException {
 		String sql = "SELECT price FROM listings WHERE nftid = ?";
 		String price = "0";
 
@@ -516,6 +516,7 @@ public class userDAO {
 			nft.setCreator(results.getString("creator"));
 			nft.setOwner(results.getString("owner"));
 			nft.setMintTime(results.getString("mintTime"));
+			nft.setDescription(results.getString("description"));
 
 			resultNFTs.add(nft);
 		}
@@ -543,6 +544,7 @@ public class userDAO {
 			nft.setCreator(results.getString("creator"));
 			nft.setOwner(results.getString("owner"));
 			nft.setMintTime(results.getString("mintTime"));
+			nft.setDescription(results.getString("description"));
 
 			resultNFTs.add(nft);
 		}

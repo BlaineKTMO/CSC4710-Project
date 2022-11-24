@@ -292,9 +292,11 @@ public class ControlServlet extends HttpServlet {
 	private void viewNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
 		List<NFT> resultList = userDAO.viewNFT(nft);
+		String price = userDAO.getPrice(nft);
 		
 		session = request.getSession();
 		session.setAttribute("nfts", resultList);
+		session.setAttribute("price", price);
 		
 		request.getRequestDispatcher("nftView.jsp").forward(request, response);
 	}

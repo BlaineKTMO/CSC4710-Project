@@ -8,30 +8,41 @@
 <title>Search Results</title>
 </head>
 <body>
+<div align="center">
 	<h1>Search Results</h1>
-	
-	<div align="center">
-		<table>
+	<table border="1" cellpadding="6">
+				<tr>
+					<th>ID</th>
+                    <th>Name</th>
+                    <th>URL</th>
+                    <th>Creator</th>
+                    <th>Owner</th>
+                    <th>Mint Time</th>
+                    <th>Description</th>
+                </tr>
 			<c:forEach var="nft" items="${nfts}">
 			<tr>
 				<td>
 					<c:out value="${nft.nftid}"/>
-				<td>
+				</td>
 				<td>
 					<c:out value="${nft.name}"/>
-				<td>
+				</td>
 				<td>
 					<c:out value="${nft.url}"/>
-				<td>
+				</td>
 				<td>
 					<c:out value="${nft.creator}"/>
-				<td>
+				</td>
 				<td>
 					<c:out value="${nft.owner}"/>
-				<td>
+				</td>
 				<td>
 					<c:out value="${nft.mintTime}"/>
+				</td>
 				<td>
+					<c:out value="${nft.description}"/>
+				</td>
 			</tr>
 			</c:forEach>
 		</table>

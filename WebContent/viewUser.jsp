@@ -8,9 +8,9 @@
 <title>Show User</title>
 </head>
 <body>
+<div align="center">
 	<h1>User Info</h1>
-	<h2> Name </h2>
-	<c:out value="${user.email}"/>
+	<h2> User : <c:out value="${user.email}"/> </h2>
 	<table border="1" cellpadding="6">
 	            <caption>
                     <h2>NFTS OWNED</h2>
@@ -34,5 +34,7 @@
 			</tr>
 			</c:forEach>
 		</table>
+		<h2> User BALANCE : $<c:out value="${user.balance}"/></h2>
+		</div>
 </body>
 </html>

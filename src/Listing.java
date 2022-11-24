@@ -3,7 +3,7 @@
  */
 
 /**
- * @author Blaine Oania
+ * @author Blaine Oania & Brandon Denha
  *
  */
 public class Listing {
