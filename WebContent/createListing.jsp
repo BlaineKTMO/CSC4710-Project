@@ -15,20 +15,20 @@
 	<div align=center>
 		<form action="submitListing" method="post" id="nft">
 			<label for="nft">NFT: </label>
+			<select name="nft" id="name" form="nft">
+					<c:forEach var="nftName" items="${names}">
+							<option>
+							<c:out value="${nftName}" />
+							</option>
+					</c:forEach>
+			</select>
 						
 			Price <input type="text" name="price" size=45>
 			Days Available <input type="text" name="daysAvailable" size=45>
 			<button type="submit">Submit Listing</button>
 
 		</form>
-		
-		<select name="nft" id="name" form="nft">
-				<c:forEach var="nftName" items="${names}">
-						<option>
-						<c:out value="${nftName}" />
-						</option>
-				</c:forEach>
-				</select>
+
 	</div>
 </body>
 

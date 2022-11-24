@@ -8,30 +8,36 @@
 <title>Purchase History</title>
 </head>
 <body>
+	<div align="center">
     <h1>Purchase History</h1>
-    <table>
+    <table border="1" cellpadding="6">
+				<tr>
+                    <th>Trans ID</th>
+                    <th>Origin</th>
+                    <th>NFT Name</th>
+                    <th>TimeStamp</th>
+                    <th>Price</th>
+                </tr>
         <c:forEach var="tran" items="${trans}">
         <tr>
             <td>
                 <c:out value="${tran.transid}"/>
-            <td>
+            </td>
             <td>
                 <c:out value="${tran.origin}"/>
-            <td>
+            </td>
             <td>
                 <c:out value="${tran.nftName}"/>
-            <td>
-            <td>
-                <c:out value="${tran.transtype}"/>
-            <td>
+            </td>
             <td>
                 <c:out value="${tran.timestamp}"/>
-            <td>
+            </td>
             <td>
                 <c:out value="${tran.price}"/>
-            <td>
+            </td>
         </tr>
         </c:forEach>
     </table>
+    </div>
 </body>
 </html>
