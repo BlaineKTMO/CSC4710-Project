@@ -685,6 +685,33 @@ public class userDAO {
 		return resultTrans;
 	}
 	
+	public List<Transaction> transactionList(int nftid) throws SQLException {
+		List<Transaction> resultTrans = new ArrayList<Transaction>();
+		String sql = "SELECT * FROM transactions WHERE nftid = '" + nftid + "'";
+		connect_func();
+
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+
+		while (results.next()) {
+			Transaction trans = new Transaction();
+			trans.setTransid(results.getInt("transid"));
+			trans.setOrigin(results.getString("origin"));
+			trans.setNftid(results.getInt("nftid"));
+			trans.setRecipient(results.getString("recipient"));
+			trans.setTranstype(results.getInt("transtype"));
+			trans.setTimestamp(results.getString("timestamp"));
+			trans.setPrice(results.getDouble("price"));
+
+			resultTrans.add(trans);
+		}
+
+		results.close();
+		disconnect();
+
+		return resultTrans;
+	}
+	
     public List<Transaction> getBought(String user) throws SQLException {
         List<Transaction> resultTransactions = new ArrayList<Transaction>();
         String sql = "SELECT * FROM Transactions WHERE recipient='"+user+"' AND transtype=1";
