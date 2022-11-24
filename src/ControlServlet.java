@@ -255,7 +255,7 @@ public class ControlServlet extends HttpServlet {
 		String nft = request.getParameter("nft");
 		String targetUser = request.getParameter("user");
 
-		userDAO.transferNFT(nft, targetUser);
+		userDAO.transferNFT(nft, targetUser, 0.);
 
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
@@ -283,14 +283,10 @@ public class ControlServlet extends HttpServlet {
 		
 		name = userDAO.searchNFT(nft).get(0).getOwner();
 		userDAO.changeBalance(name, price);
-		userDAO.transferNFT(nft, currentUser);
+		userDAO.transferNFT(nft, currentUser, price);
 		
 		
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
-	}
-	
-	private void submitSearch(HttpServletRequest request, HttpServletResponse response) {
-		
 	}
 	
 	private void viewNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {

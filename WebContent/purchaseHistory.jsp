@@ -19,7 +19,7 @@
                 <c:out value="${tran.origin}"/>
             <td>
             <td>
-                <c:out value="${tran.nftid}"/>
+                <c:out value="${tran.nftName}"/>
             <td>
             <td>
                 <c:out value="${tran.transtype}"/>

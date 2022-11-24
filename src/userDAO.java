@@ -437,7 +437,7 @@ public class userDAO {
 		return true;
 	}
 
-	public boolean transferNFT(String nftName, String targetUser) throws SQLException {
+	public boolean transferNFT(String nftName, String targetUser, Double price) throws SQLException {
 		// Need to add input validation
 		String nftid = getNFTID(nftName);
 		String sql = "UPDATE NFTs SET owner = ? WHERE nftid = ?";
@@ -450,7 +450,7 @@ public class userDAO {
         ResultSet results = statement.executeQuery(trans);
         results.next();
 
-        this.insertTransaction(results.getInt("nftid"), 0, 1, results.getString("owner"), targetUser);
+        this.insertTransaction(results.getInt("nftid"), price, 1, results.getString("owner"), targetUser);
         
         results.close();
 		disconnect();
@@ -727,7 +727,8 @@ public class userDAO {
 			trans.setTranstype(results.getInt("transtype"));
 			trans.setTimestamp(results.getString("timestamp"));
 			trans.setPrice(results.getDouble("price"));
-
+			
+			trans.setNftName(this.searchNFT(trans.getNftid()).get(0).getName());
 			resultTransactions.add(trans);
 		}
 

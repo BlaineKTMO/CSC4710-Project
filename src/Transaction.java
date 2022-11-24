@@ -6,8 +6,11 @@ public class Transaction {
     private String timestamp;
     private Double price;
     private String recipient;
+    
+    private String nftName;
 
-    public int getTransid() {
+
+	public int getTransid() {
         return transid;
     }
 
@@ -62,5 +65,14 @@ public class Transaction {
 	public void setRecipient(String recipient) {
 		this.recipient = recipient;
 	}
+	
+    public String getNftName() {
+		return nftName;
+	}
+
+	public void setNftName(String nftName) {
+		this.nftName = nftName;
+	}
+
 
 }
