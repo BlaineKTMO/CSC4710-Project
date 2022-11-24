@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 public class ControlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private userDAO userDAO = new userDAO();
+	private nftDAO nftDAO = new nftDAO();
 	private String currentUser;
 	private HttpSession session = null;
 
@@ -31,6 +32,7 @@ public class ControlServlet extends HttpServlet {
 
 	public void init() {
 		userDAO = new userDAO();
+		nftDAO = new nftDAO();
 		currentUser = "";
 	}
 
@@ -199,14 +201,14 @@ public class ControlServlet extends HttpServlet {
 		String desc = request.getParameter("description");
 		session = request.getSession();
 
-		userDAO.mintNFT(name, image, currentUser, desc);
+		nftDAO.mintNFT(name, image, currentUser, desc);
 
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
 
 	private void createListing(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		List<String> names = userDAO.getNFTNames();
+		List<String> names = nftDAO.getNFTNames();
 
 		request.setAttribute("names", names);
 		RequestDispatcher dispatcher = request.getRequestDispatcher("createListing.jsp");
@@ -240,7 +242,7 @@ public class ControlServlet extends HttpServlet {
 
 	private void startTransferPage(HttpServletRequest request, HttpServletResponse response)
 			throws SQLException, IOException, ServletException {
-		List<String> names = userDAO.getNFTNames();
+		List<String> names = nftDAO.getNFTNames();
 		List<String> users = userDAO.getUsernames();
 
 		session = request.getSession();
@@ -255,7 +257,7 @@ public class ControlServlet extends HttpServlet {
 		String nft = request.getParameter("nft");
 		String targetUser = request.getParameter("user");
 
-		userDAO.transferNFT(nft, targetUser, 0.);
+		nftDAO.transferNFT(nft, targetUser, 0.);
 
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
 	}
@@ -283,7 +285,7 @@ public class ControlServlet extends HttpServlet {
 		
 		name = userDAO.searchNFT(nft).get(0).getOwner();
 		userDAO.changeBalance(name, price);
-		userDAO.transferNFT(nft, currentUser, price);
+		nftDAO.transferNFT(nft, currentUser, price);
 		
 		
 		request.getRequestDispatcher("activitypage.jsp").forward(request, response);
@@ -291,7 +293,7 @@ public class ControlServlet extends HttpServlet {
 	
 	private void viewNFT(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String nft = request.getParameter("nft");
-		List<NFT> resultList = userDAO.viewNFT(nft);
+		List<NFT> resultList = nftDAO.viewNFT(nft);
 		List<Transaction> transList = userDAO.transactionList(Integer.parseInt(nft));
 		String price = userDAO.getPrice(nft);
 		
@@ -306,7 +308,7 @@ public class ControlServlet extends HttpServlet {
 	
 	private void creatorList(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SQLException {
-		List<NFT> resultList = userDAO.mintedList(currentUser);
+		List<NFT> resultList = nftDAO.mintedList(currentUser);
 		request.setAttribute("mintList", resultList);
 		request.getRequestDispatcher("mintedList.jsp").forward(request, response);
 	}
@@ -314,7 +316,7 @@ public class ControlServlet extends HttpServlet {
 	private void searchUser(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
 		String user = request.getParameter("user");
 		List<user> resultList = userDAO.searchUser(user);
-		List<NFT> nftList = userDAO.ownedNftList(user);
+		List<NFT> nftList = nftDAO.ownedNftList(user);
 		
 		session = request.getSession();
 		session.setAttribute("user", resultList.get(0));

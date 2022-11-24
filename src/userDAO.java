@@ -295,26 +295,6 @@ public class userDAO {
 		return user;
 	}
 
-	public List<String> getNFTNames() throws SQLException {
-		String sql = "SELECT name FROM NFTs";
-		List<String> names = new ArrayList<String>();
-
-		connect_func();
-
-		statement = connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			String nftName = results.getString("name");
-			names.add(nftName);
-		}
-
-		results.close();
-		disconnect();
-
-		return names;
-	}
-
 	public boolean checkEmail(String email) throws SQLException {
 		boolean checks = false;
 		String sql = "SELECT * FROM User WHERE email = ?";
@@ -377,37 +357,6 @@ public class userDAO {
 		return false;
 	}
 
-	public boolean mintNFT(String name, String image, String current_user, String description) throws SQLException {
-		String sql = "INSERT INTO NFTs(name, url, creator, owner, minttime, description) VALUES (?, ?, ?, ?, ?, ?);";
-
-        connect_func();
-        preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-        preparedStatement.setString(1, name);
-        preparedStatement.setString(2, image);
-        preparedStatement.setString(3, current_user);
-        preparedStatement.setString(4, current_user);
-        preparedStatement.setString(5, getTime());
-        preparedStatement.setString(6, description);
-
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
-
-        sql = String.format("SELECT nftid FROM NFTs where name=\"%s\"", name);
-        statement = (Statement) connect.createStatement();
-
-        ResultSet results = statement.executeQuery(sql);
-        results.next();
-
-        this.insertTransaction(results.getInt("nftid"), 0, 0, current_user, current_user);
-
-        results.close();
-        disconnect();
-
-
-
-        return true;
-	}
-
 	public boolean submitListing(String nftName, String user, String daysAvailable, String price) throws SQLException {
 		String sql = "INSERT INTO Listings(owner, nftid, start, end, price) VALUES (?, ?, ?, ?, ?)";
 		String getId = String.format("SELECT nftid FROM NFTs WHERE name=\"%s\"", nftName);
@@ -437,34 +386,6 @@ public class userDAO {
 		return true;
 	}
 
-	public boolean transferNFT(String nftName, String targetUser, Double price) throws SQLException {
-		// Need to add input validation
-		String nftid = getNFTID(nftName);
-		String sql = "UPDATE NFTs SET owner = ? WHERE nftid = ?";
-
-		connect_func();
-		
-		String trans = String.format("SELECT nftid, owner FROM NFTs where name=\"%s\"", nftName);
-        statement = (Statement) connect.createStatement();
-
-        ResultSet results = statement.executeQuery(trans);
-        results.next();
-
-        this.insertTransaction(results.getInt("nftid"), price, 1, results.getString("owner"), targetUser);
-        
-        results.close();
-		disconnect();
-		
-		connect_func();
-		preparedStatement = (PreparedStatement) connect.prepareStatement(sql);
-		preparedStatement.setString(1, targetUser);
-		preparedStatement.setString(2, nftid);
-		preparedStatement.executeUpdate();
-		disconnect();
-		
-		return true;
-	}
-	
 	public boolean changeBalance(String user, double change) throws SQLException {
 		// Need to add input validation
 		String sql = "UPDATE user SET balance = ? WHERE email = ?";
@@ -497,116 +418,6 @@ public class userDAO {
 		disconnect();
 		
 		return true;
-	}
-
-	public List<NFT> searchNFT(String nftName) throws SQLException {
-		List<NFT> resultNFTs = new ArrayList<NFT>();
-		String sql = "SELECT * FROM NFTs WHERE name LIKE '" + nftName + "%'";
-
-		connect_func();
-
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			NFT nft = new NFT();
-			nft.setNftid(results.getString("nftid"));
-			nft.setName(results.getString("name"));
-			nft.setUrl(results.getString("url"));
-			nft.setCreator(results.getString("creator"));
-			nft.setOwner(results.getString("owner"));
-			nft.setMintTime(results.getString("mintTime"));
-			nft.setDescription(results.getString("description"));
-
-			resultNFTs.add(nft);
-		}
-
-		results.close();
-		disconnect();
-
-		return resultNFTs;
-	}
-
-	public List<NFT> viewNFT(String nftid) throws SQLException {
-		List<NFT> resultNFTs = new ArrayList<NFT>();
-		String sql = "SELECT * FROM NFTs WHERE nftid = '" + nftid + "'";
-
-		connect_func();
-
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			NFT nft = new NFT();
-			nft.setNftid(results.getString("nftid"));
-			nft.setName(results.getString("name"));
-			nft.setUrl(results.getString("url"));
-			nft.setCreator(results.getString("creator"));
-			nft.setOwner(results.getString("owner"));
-			nft.setMintTime(results.getString("mintTime"));
-			nft.setDescription(results.getString("description"));
-
-			resultNFTs.add(nft);
-		}
-
-		results.close();
-		disconnect();
-
-		return resultNFTs;
-	}
-
-	public List<NFT> mintedList(String nftCreator) throws SQLException {
-		List<NFT> resultNFTs = new ArrayList<NFT>();
-		String sql = "SELECT * FROM NFTs WHERE creator = '" + nftCreator + "'";
-		connect_func();
-
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			NFT nft = new NFT();
-			nft.setNftid(results.getString("nftid"));
-			nft.setName(results.getString("name"));
-			nft.setUrl(results.getString("url"));
-			nft.setCreator(results.getString("creator"));
-			nft.setOwner(results.getString("owner"));
-			nft.setMintTime(results.getString("mintTime"));
-			nft.setDescription(results.getString("description"));
-
-			resultNFTs.add(nft);
-		}
-
-		results.close();
-		disconnect();
-
-		return resultNFTs;
-	}
-
-	public List<NFT> ownedNftList(String nftOwner) throws SQLException {
-		List<NFT> resultNFTs = new ArrayList<NFT>();
-		String sql = "SELECT * FROM NFTs WHERE owner = '" + nftOwner + "'";
-		connect_func();
-
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-
-		while (results.next()) {
-			NFT nft = new NFT();
-			nft.setNftid(results.getString("nftid"));
-			nft.setName(results.getString("name"));
-			nft.setUrl(results.getString("url"));
-			nft.setCreator(results.getString("creator"));
-			nft.setOwner(results.getString("owner"));
-			nft.setMintTime(results.getString("mintTime"));
-			nft.setDescription(results.getString("description"));
-
-			resultNFTs.add(nft);
-		}
-
-		results.close();
-		disconnect();
-
-		return resultNFTs;
 	}
 
 	public List<user> searchUser(String user) throws SQLException {
@@ -712,7 +523,63 @@ public class userDAO {
 		return resultTrans;
 	}
 	
-    public List<Transaction> getBought(String user) throws SQLException {
+    public List<NFT> searchNFT(int nftid) throws SQLException
+	{
+	    List<NFT> resultNFTs = new ArrayList<NFT>();
+	    String sql = "SELECT * FROM NFTs WHERE nftid ='" + nftid + "'";
+	    
+	    connect_func();
+	    
+	    statement = (Statement) connect.createStatement();
+	    ResultSet results = statement.executeQuery(sql);
+	    
+	    while (results.next()){
+	        NFT nft = new NFT();
+	        nft.setNftid(results.getString("nftid"));
+	        nft.setName(results.getString("name"));
+	        nft.setUrl(results.getString("url"));
+	        nft.setCreator(results.getString("creator"));
+	        nft.setOwner(results.getString("owner"));
+	        nft.setMintTime(results.getString("mintTime"));
+	        
+	        resultNFTs.add(nft);
+	    }
+	    
+	    results.close();
+	    disconnect();
+	    
+	    return resultNFTs;
+	}
+
+	public List<NFT> searchNFT(String nftName) throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT * FROM NFTs WHERE name LIKE '" + nftName + "%'";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("nftid"));
+			nft.setName(results.getString("name"));
+			nft.setUrl(results.getString("url"));
+			nft.setCreator(results.getString("creator"));
+			nft.setOwner(results.getString("owner"));
+			nft.setMintTime(results.getString("mintTime"));
+			nft.setDescription(results.getString("description"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+
+	public List<Transaction> getBought(String user) throws SQLException {
         List<Transaction> resultTransactions = new ArrayList<Transaction>();
         String sql = "SELECT * FROM Transactions WHERE recipient='"+user+"' AND transtype=1";
         connect_func();
@@ -773,35 +640,7 @@ public class userDAO {
         return resultTransactions;
     }
     
-    public List<NFT> searchNFT(int nftid) throws SQLException
-    {
-        List<NFT> resultNFTs = new ArrayList<NFT>();
-        String sql = "SELECT * FROM NFTs WHERE nftid ='" + nftid + "'";
-        
-        connect_func();
-        
-        statement = (Statement) connect.createStatement();
-        ResultSet results = statement.executeQuery(sql);
-        
-        while (results.next()){
-            NFT nft = new NFT();
-            nft.setNftid(results.getString("nftid"));
-            nft.setName(results.getString("name"));
-            nft.setUrl(results.getString("url"));
-            nft.setCreator(results.getString("creator"));
-            nft.setOwner(results.getString("owner"));
-            nft.setMintTime(results.getString("mintTime"));
-            
-            resultNFTs.add(nft);
-        }
-        
-        results.close();
-        disconnect();
-        
-        return resultNFTs;
-    }
-
-	public void init() throws SQLException, FileNotFoundException, IOException {
+    public void init() throws SQLException, FileNotFoundException, IOException {
 		connect_func();
 		statement = (Statement) connect.createStatement();
 
