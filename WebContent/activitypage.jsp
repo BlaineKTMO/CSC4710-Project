@@ -13,8 +13,7 @@
 <body>
 	<center>
 		<a href="login.jsp" target="_self"> logout</a><br><br>
-		<p> You can show all the transactions or other attributes here like balance, name of the user and
-			others.</p>
+		<p> Select from one of the options below: </p>
 	</center>
 	<div align="center">
 		<button onClick="window.location.href='mint.jsp';">
