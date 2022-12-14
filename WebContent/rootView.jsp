@@ -28,7 +28,7 @@
                     <th>Email</th>
                     <th>First name</th>
                     <th>Last name</th>
-                    <th>Adress</th>
+                    <th>Address</th>
                     <th>Password</th>
                     <th>Birthday</th>
                 </tr>
@@ -56,6 +56,162 @@
                 </c:forEach>
             </table>
         </div>
+        
+        <table border="1" cellpadding="6">
+        <caption>
+        	<h2>Big Creators</h2>
+        </caption>
+                <tr>
+                    <th>User(s)</th>
+                    <th>Amount Created</th>
+                </tr>
+         <c:forEach var="mostCreated" items="${mostCreated}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${mostCreated.name}"/>
+       		</td>
+       		<td>
+       			<c:out value = "${mostCreated.nftid}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Big Sellers</h2>
+        </caption>
+                <tr>
+                    <th>User(s)</th>
+                    <th>Amount Sold</th>
+                </tr>
+         <c:forEach var="mostSold" items="${mostSold}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${mostSold.name}"/>
+       		</td>
+       		<td>
+       			<c:out value = "${mostSold.nftid}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Big Buyer</h2>
+        </caption>
+                <tr>
+                    <th>User(s)</th>
+                    <th>Amount Bought</th>
+                </tr>
+         <c:forEach var="mostBought" items="${mostBought}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${mostBought.name}"/>
+       		</td>
+       		<td>
+       			<c:out value = "${mostBought.nftid}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Hot NFT's</h2>
+        </caption>
+                <tr>
+                    <th>Nft ID</th>
+                    <th>Amount of Owners</th>
+                </tr>
+         <c:forEach var="mostOwners" items="${mostOwners}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${mostOwners.name}"/>
+       		</td>
+       		<td>
+       			<c:out value = "${mostOwners.nftid}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Diamond Hands</h2>
+        </caption>
+                <tr>
+                    <th>Name</th>
+                </tr>
+         <c:forEach var="diamondHands" items="${diamondHands}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${diamondHands.name}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Good Buyer's</h2>
+        </caption>
+                <tr>
+                    <th>Name</th>
+                </tr>
+         <c:forEach var="goodBuyer" items="${goodBuyer}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${goodBuyer.name}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Inactive Users</h2>
+        </caption>
+                <tr>
+                    <th>Name</th>
+                </tr>
+         <c:forEach var="inactiveUser" items="${inactiveUser}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${inactiveUser.name}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Statistics</h2>
+        </caption>
+                <tr>
+                    <th>Name</th>
+                    <th>NFTs Owned</th>
+                    <th>Buys</th>
+                    <th>Sells</th>
+                    <th>Transfers</th>
+                </tr>
+                
+         <c:forEach var="Statistics" items="${Statistics}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${Statistics.name}"/>
+       		</td>
+       		<td>
+           		<c:out value = "${Statistics.nftid}"/>
+       		</td>
+       		<td>
+           		<c:out value = "${Statistics.owner}"/>
+       		</td>
+       		<td>
+           		<c:out value = "${Statistics.creator}"/>
+       		</td>
+       		<td>
+           		<c:out value = "${Statistics.url}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	
+       	
     </div>
 
 </body>

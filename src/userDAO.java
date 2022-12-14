@@ -640,6 +640,221 @@ public class userDAO {
         return resultTransactions;
     }
     
+    //Start of Root Functions
+    
+    public List<NFT> mostCreated() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT creator AS Mode, COUNT(*) AS Count \r\n"
+				+ "FROM nfts \r\n"
+				+ "GROUP BY creator\r\n"
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM nfts GROUP BY creator)";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("Count"));
+			nft.setName(results.getString("Mode"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> mostSold() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT origin AS Mode, COUNT(*) AS Count \r\n"
+				+ "FROM transactions\r\n"
+				+ "GROUP BY origin\r\n"
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY origin);";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("Count"));
+			nft.setName(results.getString("Mode"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> mostBought() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT recipient AS Mode, COUNT(*) AS Count \r\n"
+				+ "FROM transactions\r\n"
+				+ "GROUP BY recipient\r\n"
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY recipient);";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("Count"));
+			nft.setName(results.getString("Mode"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> mostOwners() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT nftid AS Mode, COUNT(*) AS Count \r\n"
+				+ "FROM transactions\r\n"
+				+ "GROUP BY nftid\r\n"
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY nftid);";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setNftid(results.getString("Count"));
+			nft.setName(results.getString("Mode"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> goodBuyer() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT recipient\r\n"
+				+ "FROM transactions\r\n"
+				+ "GROUP BY recipient\r\n"
+				+ "HAVING COUNT(*) >= 3;";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setName(results.getString("Recipient"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> inactiveUser() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT email \r\n"
+				+ "FROM user \r\n"
+				+ "WHERE email NOT IN (SELECT creator FROM nfts UNION SELECT origin FROM transactions);";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setName(results.getString("email"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> Statistics() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT\r\n"
+				+ "	user.email as name,\r\n"
+				+ "    (SELECT COUNT(*) FROM nfts WHERE owner = user.email) as nftsOwned,\r\n"
+				+ "    (SELECT COUNT(*) FROM transactions WHERE origin = user.email) as sells,\r\n"
+				+ "    (SELECT COUNT(*) FROM transactions WHERE recipient = user.email) as buys,\r\n"
+				+ "	(SELECT COUNT(*) FROM transactions WHERE transtype = 0 AND origin = user.email) as transfers\r\n"
+				+ "FROM user;";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setName(results.getString("name"));
+			nft.setNftid(results.getString("nftsOwned"));
+			nft.setOwner(results.getString("buys"));
+			nft.setCreator(results.getString("sells"));
+			nft.setUrl(results.getString("transfers"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    public List<NFT> diamondHands() throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT t.nftid, t.recipient \r\n"
+				+ "FROM transactions t \r\n"
+				+ "JOIN (SELECT nftid, MAX(transid) as max_transid \r\n"
+				+ "      FROM transactions \r\n"
+				+ "      GROUP BY nftid) mt \r\n"
+				+ "ON t.nftid=mt.nftid AND t.transid=mt.max_transid;";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setName(results.getString("recipient"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+	}
+    
+    
     public void init() throws SQLException, FileNotFoundException, IOException {
 		connect_func();
 		statement = (Statement) connect.createStatement();

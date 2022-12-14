@@ -130,6 +130,14 @@ public class ControlServlet extends HttpServlet {
 			throws ServletException, IOException, SQLException {
 		System.out.println("root view");
 		request.setAttribute("listUser", userDAO.listAllUsers());
+		request.setAttribute("mostCreated", userDAO.mostCreated());
+		request.setAttribute("mostSold", userDAO.mostSold());
+		request.setAttribute("mostBought", userDAO.mostBought());
+		request.setAttribute("mostOwners", userDAO.mostOwners());
+		request.setAttribute("diamondHands", userDAO.diamondHands());
+		request.setAttribute("goodBuyer", userDAO.goodBuyer());
+		request.setAttribute("inactiveUser", userDAO.inactiveUser());
+		request.setAttribute("Statistics", userDAO.Statistics());
 		request.getRequestDispatcher("rootView.jsp").forward(request, response);
 	}
 
