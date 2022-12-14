@@ -135,6 +135,7 @@ public class ControlServlet extends HttpServlet {
 		request.setAttribute("mostBought", userDAO.mostBought());
 		request.setAttribute("mostOwners", userDAO.mostOwners());
 		request.setAttribute("diamondHands", userDAO.diamondHands());
+		request.setAttribute("paperHands", userDAO.paperHands());
 		request.setAttribute("goodBuyer", userDAO.goodBuyer());
 		request.setAttribute("inactiveUser", userDAO.inactiveUser());
 		request.setAttribute("Statistics", userDAO.Statistics());

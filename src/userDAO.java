@@ -854,6 +854,38 @@ public class userDAO {
 		return resultNFTs;
 	}
     
+    public List<user> paperHands() throws SQLException {
+    	List<user> users = listAllUsers();
+    	List<Integer> results = new ArrayList<Integer>();
+    	List<user> output = new ArrayList<user>();
+    	int min = 99;
+    	
+    	for(user name : users) {
+    		List<Transaction> bought = getBought(name.email);
+    		List<Transaction> sold = getSold(name.email);
+    		
+    		int paper = bought.size() - sold.size();
+    		
+    		results.add(paper);
+    	}
+    	
+    	for(int i = 0; i < users.size(); i++)
+    	{
+    		int val = results.get(i);
+    		if(val < min) {
+    			min = val;
+    		}
+    	}
+    	
+    	for(int i = 0; i < results.size(); i++)
+    	{
+    		if(results.get(i) == min)
+    			output.add(users.get(i));
+    	}
+    	
+		return output;
+	}
+    
     
     public void init() throws SQLException, FileNotFoundException, IOException {
 		connect_func();

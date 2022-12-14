@@ -150,6 +150,21 @@
        	
        	<table border="1" cellpadding="6">
         <caption>
+        	<h2>Paper Hands</h2>
+        </caption>
+                <tr>
+                    <th>Name</th>
+                </tr>
+         <c:forEach var="paperHand" items="${paperHands}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${paperHand.email}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	
+       	<table border="1" cellpadding="6">
+        <caption>
         	<h2>Good Buyer's</h2>
         </caption>
                 <tr>
