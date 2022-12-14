@@ -133,6 +133,39 @@
        	</c:forEach>
        	</table>
        	
+       	<br>
+       	<table border="1" cellpadding="6">
+        <caption>
+        	<h2>Common NFTs</h2>
+        </caption>
+                <tr>
+                    <th>NFT ID</th>
+                </tr>
+         <c:forEach var="commonNFT" items="${commonNFT}">
+         <tr style="text-align:center">
+            <td>
+           		<c:out value = "${commonNFT.name}"/>
+       		</td>
+       	</c:forEach>
+       	</table>
+       	<form action="root" method="post">
+		<select name="user1" id = "user1">
+		<c:forEach var="user" items="${user}">
+		<option>
+			<c:out value="${user.email}"/>
+		</option>
+		</c:forEach>
+		</select>
+		<select name="user2" id = "user2">
+		<c:forEach var="user" items="${user}">
+		<option>
+			<c:out value="${user.email}"/>
+		</option>
+		</c:forEach>
+		</select>
+		<input type="submit" value = "rootSearch">
+		</form>
+		
        	<table border="1" cellpadding="6">
         <caption>
         	<h2>Diamond Hands</h2>

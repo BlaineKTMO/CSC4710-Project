@@ -134,6 +134,13 @@ public class ControlServlet extends HttpServlet {
 		request.setAttribute("mostSold", userDAO.mostSold());
 		request.setAttribute("mostBought", userDAO.mostBought());
 		request.setAttribute("mostOwners", userDAO.mostOwners());
+		
+		String user1 = request.getParameter("user1");
+		String user2 = request.getParameter("user2");
+		List<user> resultList = userDAO.listAllUsers();
+		session.setAttribute("user", resultList);
+		request.setAttribute("commonNFT", userDAO.commonNFT(user1,user2));
+
 		request.setAttribute("diamondHands", userDAO.diamondHands());
 		request.setAttribute("paperHands", userDAO.paperHands());
 		request.setAttribute("goodBuyer", userDAO.goodBuyer());

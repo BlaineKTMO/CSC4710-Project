@@ -884,6 +884,32 @@ public class userDAO {
     	}
     	
 		return output;
+    }
+
+    public List<NFT> commonNFT(String user1, String user2) throws SQLException {
+		List<NFT> resultNFTs = new ArrayList<NFT>();
+		String sql = "SELECT nftid\r\n"
+				+ "FROM transactions \r\n"
+				+ "WHERE (origin = '" + user1 + "' AND recipient = '" + user2 + "') OR (origin = '" + user2 + "' AND recipient = '" + user1 + "')\r\n"
+				+ "GROUP BY nftid;";
+	
+		connect_func();
+	
+		statement = (Statement) connect.createStatement();
+		ResultSet results = statement.executeQuery(sql);
+	
+		while (results.next()) {
+			NFT nft = new NFT();
+			nft.setName(results.getString("nftid"));
+	
+			resultNFTs.add(nft);
+		}
+	
+		results.close();
+		disconnect();
+	
+		return resultNFTs;
+
 	}
     
     
