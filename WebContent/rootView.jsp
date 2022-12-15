@@ -176,7 +176,7 @@
          <c:forEach var="diamondHands" items="${diamondHands}">
          <tr style="text-align:center">
             <td>
-           		<c:out value = "${diamondHands.name}"/>
+           		<c:out value = "${diamondHands.email}"/>
        		</td>
        	</c:forEach>
        	</table>

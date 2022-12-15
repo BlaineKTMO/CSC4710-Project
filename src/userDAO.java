@@ -672,8 +672,9 @@ public class userDAO {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT origin AS Mode, COUNT(*) AS Count \r\n"
 				+ "FROM transactions\r\n"
+				+ "WHERE transType = 1\r\n"
 				+ "GROUP BY origin\r\n"
-				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY origin);";
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions WHERE transType = 1 GROUP BY origin);";
 	
 		connect_func();
 	
@@ -698,8 +699,9 @@ public class userDAO {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT recipient AS Mode, COUNT(*) AS Count \r\n"
 				+ "FROM transactions\r\n"
+				+ "WHERE transType = 1\r\n"
 				+ "GROUP BY recipient\r\n"
-				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY recipient);";
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions WHERE transType = 1 GROUP BY recipient);";
 	
 		connect_func();
 	
@@ -724,8 +726,9 @@ public class userDAO {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT nftid AS Mode, COUNT(*) AS Count \r\n"
 				+ "FROM transactions\r\n"
+				+ "WHERE transtype = 1\r\n"
 				+ "GROUP BY nftid\r\n"
-				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions GROUP BY nftid);";
+				+ "HAVING COUNT(*) >= ALL (SELECT COUNT(*) FROM transactions WHERE transtype = 1 GROUP BY nftid);";
 	
 		connect_func();
 	
@@ -750,6 +753,7 @@ public class userDAO {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT recipient\r\n"
 				+ "FROM transactions\r\n"
+				+ "WHERE transType = 1\r\n"
 				+ "GROUP BY recipient\r\n"
 				+ "HAVING COUNT(*) >= 3;";
 	
@@ -775,13 +779,13 @@ public class userDAO {
 		List<NFT> resultNFTs = new ArrayList<NFT>();
 		String sql = "SELECT email \r\n"
 				+ "FROM user \r\n"
-				+ "WHERE email NOT IN (SELECT creator FROM nfts UNION SELECT origin FROM transactions);";
+				+ "WHERE email NOT IN (SELECT creator FROM nfts UNION SELECT origin FROM transactions UNION Select recipient FROM transactions);";
 	
 		connect_func();
 	
 		statement = (Statement) connect.createStatement();
 		ResultSet results = statement.executeQuery(sql);
-	
+		
 		while (results.next()) {
 			NFT nft = new NFT();
 			nft.setName(results.getString("email"));
@@ -800,8 +804,8 @@ public class userDAO {
 		String sql = "SELECT\r\n"
 				+ "	user.email as name,\r\n"
 				+ "    (SELECT COUNT(*) FROM nfts WHERE owner = user.email) as nftsOwned,\r\n"
-				+ "    (SELECT COUNT(*) FROM transactions WHERE origin = user.email) as sells,\r\n"
-				+ "    (SELECT COUNT(*) FROM transactions WHERE recipient = user.email) as buys,\r\n"
+				+ "    (SELECT COUNT(*) FROM transactions WHERE origin = user.email AND transType = 1) as sells,\r\n"
+				+ "    (SELECT COUNT(*) FROM transactions WHERE recipient = user.email AND transType = 1) as buys,\r\n"
 				+ "	(SELECT COUNT(*) FROM transactions WHERE transtype = 0 AND origin = user.email) as transfers\r\n"
 				+ "FROM user;";
 	
@@ -827,38 +831,10 @@ public class userDAO {
 		return resultNFTs;
 	}
     
-    public List<NFT> diamondHands() throws SQLException {
-		List<NFT> resultNFTs = new ArrayList<NFT>();
-		String sql = "SELECT t.nftid, t.recipient \r\n"
-				+ "FROM transactions t \r\n"
-				+ "JOIN (SELECT nftid, MAX(transid) as max_transid \r\n"
-				+ "      FROM transactions \r\n"
-				+ "      GROUP BY nftid) mt \r\n"
-				+ "ON t.nftid=mt.nftid AND t.transid=mt.max_transid;";
-	
-		connect_func();
-	
-		statement = (Statement) connect.createStatement();
-		ResultSet results = statement.executeQuery(sql);
-	
-		while (results.next()) {
-			NFT nft = new NFT();
-			nft.setName(results.getString("recipient"));
-	
-			resultNFTs.add(nft);
-		}
-	
-		results.close();
-		disconnect();
-	
-		return resultNFTs;
-	}
-    
-    public List<user> paperHands() throws SQLException {
+    public List<user> diamondHands() throws SQLException {
     	List<user> users = listAllUsers();
     	List<Integer> results = new ArrayList<Integer>();
     	List<user> output = new ArrayList<user>();
-    	int min = 99;
     	
     	for(user name : users) {
     		List<Transaction> bought = getBought(name.email);
@@ -872,15 +848,27 @@ public class userDAO {
     	for(int i = 0; i < users.size(); i++)
     	{
     		int val = results.get(i);
-    		if(val < min) {
-    			min = val;
+    		if(val > 0) {
+    			output.add(users.get(i));
     		}
     	}
+    
+		return output;
+	}
+    
+    public List<user> paperHands() throws SQLException {
+    	List<user> users = listAllUsers();
+    	List<user> output = new ArrayList<user>();
     	
-    	for(int i = 0; i < results.size(); i++)
-    	{
-    		if(results.get(i) == min)
-    			output.add(users.get(i));
+    	for(user name : users) {
+    		List<Transaction> bought = getBought(name.email);
+    		List<Transaction> sold = getSold(name.email);
+    		
+    		if (bought.size() > 1 && bought.size() == sold.size())
+    		{
+        		output.add(name);
+    		}
+
     	}
     	
 		return output;
