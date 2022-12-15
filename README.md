@@ -26,5 +26,14 @@ Handled transaction data access functions and updating table, purchase/sale hist
 
 Brandon Denha
 Created nft and user page jsps, control servlet actions corresponding to nftdao, nftdao functions for listing minted nfts, formatting
-
 Hours Worked together: ~25 hours
+
+Part 4
+Contributions:
+Blaine Oania
+Parts 6-10
+
+Brandon Denha
+Parts 1-5
+
+Hours worked together: ~8 Hours
